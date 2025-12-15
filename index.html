@@ -91,12 +91,13 @@
 
       .hero-layout {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         justify-content: center;
-        gap: 2.5rem;
-        max-width: 1200px;
+        gap: 3rem;
+        max-width: 1400px;
         width: 100%;
         padding: 3rem;
+        height: 100%;
       }
 
       .hero-content {
@@ -134,12 +135,15 @@
       .hero-images {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         gap: 1.5rem;
+        height: 80vh;
+        flex: 0 0 260px;
       }
 
       .hero-img {
-        width: 180px;
-        max-width: 100%;
+        width: 100%;
+        height: 48%;
         border: 2px solid rgba(255, 255, 255, 0.6);
         border-radius: 10px;
         object-fit: cover;
@@ -194,16 +198,19 @@
         .hero-layout {
           flex-direction: column;
           padding: 2.5rem 1.5rem 3rem;
+          height: auto;
         }
 
         .hero-images {
           flex-direction: row;
           flex-wrap: wrap;
           justify-content: center;
+          height: auto;
         }
 
         .hero-img {
           width: 45%;
+          height: auto;
         }
 
         .hero-title {
@@ -234,7 +241,7 @@
         <ul class="nav-links">
           <li><a href="#home">Home</a></li>
           <li><a href="https://www.youtube.com/watch?v=ZKMU72K2Jqc">Watch</a></li>
-          <li><a href="#about">About</a></li>
+          <li><a href="about.html">About</a></li>
         </ul>
       </nav>
     </header>
@@ -289,6 +296,10 @@
         </div>
       </div>
     </section>
+
+    <footer style="text-align:center; padding: 2rem 1rem; color:#aaa; font-size:0.9rem;">
+      gg wp thx for tutorial :)
+    </footer>
 
     <script>
       // Auto-open video in new tab on page load
