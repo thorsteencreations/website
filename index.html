@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GG - Watch Now</title>
+    <link rel="icon" type="image/png" href="img/images.png" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: #000;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      /* Header Navigation */
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 100;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 3rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, #fff, #d4af37);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2.5rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: #d4af37;
+      }
+
+      /* Hero Section */
+      .hero {
+        margin-top: 70px;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+      }
+
+      .hero-content {
+        max-width: 900px;
+        padding: 3rem;
+      }
+
+      .hero-title {
+        font-size: 4.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        line-height: 1.2;
+      }
+
+      .hero-subtitle {
+        font-size: 1.5rem;
+        color: #d4af37;
+        margin-bottom: 3rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .hero-description {
+        font-size: 1.1rem;
+        color: #ccc;
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* CTA Button */
+      .cta-button {
+        display: inline-block;
+        padding: 1rem 3rem;
+        background: linear-gradient(135deg, #d4af37, #f0e68c);
+        color: #000;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+      }
+
+      /* Accent Line */
+      .accent-line {
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #d4af37, #f0e68c);
+        margin: 2rem auto;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        nav {
+          padding: 1rem 1.5rem;
+        }
+
+        .logo {
+          font-size: 1.4rem;
+        }
+
+        .nav-links {
+          gap: 1.5rem;
+          font-size: 0.85rem;
+        }
+
+        .hero-title {
+          font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1.1rem;
+        }
+
+        .hero-description {
+          font-size: 1rem;
+        }
+
+        .cta-button {
+          padding: 0.8rem 2rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <nav>
+        <div class="logo">GG</div>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="https://www.youtube.com/watch?v=ZKMU72K2Jqc">Watch</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h1 class="hero-title">damn sonn<br>you just got<br>rekt</h1>
+        <div class="accent-line"></div>
+        <p class="hero-subtitle">Experience the moment of top gap</p>
+        <p class="hero-description">
+          Watch the most iconic video moment. Get ready for the ultimate experience that will change everything.
+        </p>
+        <button class="cta-button" onclick="window.open('https://www.youtube.com/watch?v=ZKMU72K2Jqc', '_blank')">i just got wrecked</button>
+      </div>
+    </section>
+
+    <script>
+      // Auto-open video in new tab on page load
+      window.addEventListener('load', function() {
+        window.open('https://www.youtube.com/watch?v=ZKMU72K2Jqc', '_blank');
+      });
+    </script>
+  </body>
+</html>
