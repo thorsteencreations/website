@@ -205,6 +205,15 @@
         height: 100%;
       }
 
+      .maps-teemo {
+        width: 120px;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+        border: 2px solid rgba(255,255,255,0.06);
+      }
+
       .spyglass {
         transition: transform 0.1s ease-out;
         transform-origin: 50px 20px;
@@ -336,53 +345,12 @@
             ></iframe>
           </div>
           <div class="stick-figure-container">
-            <div class="stick-figure" id="stickFigure">
-              <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
-                <!-- Head -->
-                <circle cx="50" cy="20" r="12" fill="none" stroke="#fff" stroke-width="2"/>
-                
-                <!-- Suit Jacket -->
-                <path d="M 35 35 L 35 80 L 30 80 L 30 90 L 70 90 L 70 80 L 65 80 L 65 35 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                <!-- Suit Lapels -->
-                <path d="M 35 35 L 50 50 L 65 35" stroke="#fff" stroke-width="2" fill="none"/>
-                <!-- Tie -->
-                <path d="M 50 50 L 50 85" stroke="#fff" stroke-width="1.5"/>
-                <path d="M 48 85 L 52 85 L 50 90 Z" fill="#fff"/>
-                
-                <!-- Arms -->
-                <line x1="35" y1="50" x2="20" y2="70" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                <line x1="65" y1="50" x2="80" y2="70" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                
-                <!-- Hands -->
-                <circle cx="20" cy="70" r="3" fill="#fff"/>
-                <circle cx="80" cy="70" r="3" fill="#fff"/>
-                
-                <!-- Legs -->
-                <line x1="40" y1="90" x2="40" y2="180" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                <line x1="60" y1="90" x2="60" y2="180" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                
-                <!-- Feet -->
-                <line x1="40" y1="180" x2="30" y2="190" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                <line x1="60" y1="180" x2="70" y2="190" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                
-                 <!-- Pirate Spyglass/Telescope (will rotate to follow cursor) -->
-                 <g class="spyglass" id="spyglass">
-                   <!-- Spyglass body (extended tube) -->
-                   <ellipse cx="50" cy="20" rx="6" ry="4" fill="#8B4513" stroke="#654321" stroke-width="1"/>
-                   <ellipse cx="50" cy="15" rx="5" ry="3" fill="#8B4513" stroke="#654321" stroke-width="1"/>
-                   <ellipse cx="50" cy="10" rx="4" ry="2.5" fill="#8B4513" stroke="#654321" stroke-width="1"/>
-                   <!-- Lens at front -->
-                   <circle cx="50" cy="10" r="3.5" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-                   <circle cx="50" cy="10" r="2.5" fill="rgba(255, 255, 255, 0.3)"/>
-                   <!-- Eye piece at back -->
-                   <circle cx="50" cy="20" r="4" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-                   <circle cx="50" cy="20" r="2.5" fill="rgba(0, 0, 0, 0.5)"/>
-                   <!-- Decorative rings -->
-                   <line x1="46" y1="12" x2="54" y2="12" stroke="#654321" stroke-width="0.5"/>
-                   <line x1="46" y1="17" x2="54" y2="17" stroke="#654321" stroke-width="0.5"/>
-                 </g>
-              </svg>
-            </div>
+            <img
+              src="img/Teemo.jpg"
+              alt="Teemo"
+              class="maps-teemo"
+              onerror="this.onerror=null;this.src='https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Teemo_0.jpg';"
+            />
           </div>
         </div>
       </div>
