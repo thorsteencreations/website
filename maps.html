@@ -82,9 +82,12 @@
         transform: translate(-50%, -50%);
         width: 40px;
         height: 40px;
-        transition: transform 0.1s ease-out;
         pointer-events: none;
         z-index: 101;
+      }
+      
+      .stick-head circle[id^="eye"] {
+        transition: cx 0.1s ease-out, cy 0.1s ease-out;
       }
 
       .stick-head svg {
@@ -95,31 +98,115 @@
       /* Maps Container */
       .maps-container {
         margin-top: 70px;
-        width: 100%;
-        height: calc(100vh - 70px);
+        min-height: calc(100vh - 70px);
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+      }
+
+      .maps-content {
+        display: flex;
+        gap: 3rem;
+        max-width: 1400px;
+        width: 100%;
+        align-items: flex-start;
+      }
+
+      .maps-info {
+        flex: 0 0 400px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .maps-info h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border-bottom: 2px solid #d4af37;
+        padding-bottom: 1rem;
+      }
+
+      .address-section {
+        margin-bottom: 2rem;
+      }
+
+      .address-section h3 {
+        font-size: 1.1rem;
+        color: #d4af37;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .address-section p {
+        font-size: 1rem;
+        color: #ccc;
+        line-height: 1.8;
+        margin-bottom: 0.5rem;
+      }
+
+      .address-section .address-line {
+        color: #fff;
+        font-weight: 500;
+      }
+
+      .hours-section {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .hours-section p {
+        font-size: 1rem;
+        color: #fff;
+        line-height: 1.8;
+        font-style: italic;
       }
 
       .maps-wrapper {
-        width: 100%;
-        max-width: 1200px;
-        height: 100%;
-        border-radius: 10px;
+        flex: 1;
+        min-height: 600px;
+        border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
         border: 2px solid rgba(255, 255, 255, 0.1);
+        background: #000;
       }
 
       .maps-wrapper iframe {
         width: 100%;
         height: 100%;
+        min-height: 600px;
         border: none;
       }
 
       /* Responsive */
+      @media (max-width: 1024px) {
+        .maps-content {
+          flex-direction: column;
+          gap: 2rem;
+        }
+
+        .maps-info {
+          flex: 1;
+          width: 100%;
+        }
+
+        .maps-wrapper {
+          width: 100%;
+        }
+      }
+
       @media (max-width: 768px) {
         nav {
           padding: 1rem 1.5rem;
@@ -135,7 +222,23 @@
         }
 
         .maps-container {
-          padding: 1rem;
+          padding: 2rem 1rem;
+        }
+
+        .maps-info {
+          padding: 1.5rem;
+        }
+
+        .maps-info h2 {
+          font-size: 1.5rem;
+        }
+
+        .maps-wrapper {
+          min-height: 400px;
+        }
+
+        .maps-wrapper iframe {
+          min-height: 400px;
         }
       }
     </style>
@@ -149,11 +252,11 @@
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <!-- Head circle -->
             <circle cx="50" cy="30" r="20" fill="none" stroke="#fff" stroke-width="3"/>
-            <!-- Eyes -->
-            <circle cx="42" cy="25" r="2" fill="#fff"/>
-            <circle cx="58" cy="25" r="2" fill="#fff"/>
+            <!-- Eyes (will move to follow cursor) -->
+            <circle id="eyeLeft" cx="42" cy="25" r="2" fill="#fff"/>
+            <circle id="eyeRight" cx="58" cy="25" r="2" fill="#fff"/>
             <!-- Smile -->
-            <path d="M 40 35 Q 50 42 60 35" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M 35 35 Q 50 48 65 35" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
           </svg>
         </div>
         <ul class="nav-links">
@@ -167,35 +270,78 @@
 
     <!-- Maps Section -->
     <div class="maps-container">
-      <div class="maps-wrapper">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.184133982!2d-73.98811768459418!3d40.74844097932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
+      <div class="maps-content">
+        <div class="maps-info">
+          <h2>Visit Us</h2>
+          <div class="address-section">
+            <h3>Location</h3>
+            <p class="address-line">Empire State Building</p>
+            <p>350 5th Avenue</p>
+            <p>New York, NY 10118</p>
+            <p>United States</p>
+          </div>
+          <div class="hours-section">
+            <p>We are always open for anyone who wishes to visit.</p>
+          </div>
+        </div>
+        <div class="maps-wrapper">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.184133982!2d-73.98811768459418!3d40.74844097932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
       </div>
     </div>
 
     <script>
-      // Stick figure head follows cursor
+      // Eyes follow cursor (head stays fixed)
       const stickHead = document.getElementById('stickHead');
+      const eyeLeft = document.getElementById('eyeLeft');
+      const eyeRight = document.getElementById('eyeRight');
       const nav = document.querySelector('nav');
+      
+      // Head center in SVG coordinates (50, 30)
+      const headCenterX = 50;
+      const headCenterY = 30;
+      const eyeRadius = 6; // Max distance eyes can move from center
       
       document.addEventListener('mousemove', (e) => {
         const navRect = nav.getBoundingClientRect();
-        const navCenterX = navRect.left + navRect.width / 2;
-        const navCenterY = navRect.top + navRect.height / 2;
+        const stickHeadRect = stickHead.getBoundingClientRect();
         
+        // Get head center in screen coordinates
+        const headScreenX = stickHeadRect.left + stickHeadRect.width / 2;
+        const headScreenY = stickHeadRect.top + stickHeadRect.height / 2;
+        
+        // Calculate mouse position relative to head center
         const mouseX = e.clientX;
         const mouseY = e.clientY;
         
-        const deltaX = mouseX - navCenterX;
-        const deltaY = mouseY - navCenterY;
+        const deltaX = mouseX - headScreenX;
+        const deltaY = mouseY - headScreenY;
         
-        const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+        // Calculate angle and distance
+        const angle = Math.atan2(deltaY, deltaX);
+        const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 10, eyeRadius);
         
-        stickHead.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+        // Calculate eye positions (eyes move together but stay within head)
+        const eyeOffsetX = Math.cos(angle) * distance;
+        const eyeOffsetY = Math.sin(angle) * distance;
+        
+        // Left eye (starts at 42, 25)
+        const leftEyeX = headCenterX - 8 + eyeOffsetX;
+        const leftEyeY = headCenterY - 5 + eyeOffsetY;
+        
+        // Right eye (starts at 58, 25)
+        const rightEyeX = headCenterX + 8 + eyeOffsetX;
+        const rightEyeY = headCenterY - 5 + eyeOffsetY;
+        
+        eyeLeft.setAttribute('cx', leftEyeX);
+        eyeLeft.setAttribute('cy', leftEyeY);
+        eyeRight.setAttribute('cx', rightEyeX);
+        eyeRight.setAttribute('cy', rightEyeY);
       });
     </script>
   </body>

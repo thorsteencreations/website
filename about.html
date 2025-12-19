@@ -82,9 +82,12 @@
         transform: translate(-50%, -50%);
         width: 40px;
         height: 40px;
-        transition: transform 0.1s ease-out;
         pointer-events: none;
         z-index: 101;
+      }
+      
+      .stick-head circle[id^="eye"] {
+        transition: cx 0.1s ease-out, cy 0.1s ease-out;
       }
 
       .stick-head svg {
@@ -138,11 +141,11 @@
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <!-- Head circle -->
             <circle cx="50" cy="30" r="20" fill="none" stroke="#fff" stroke-width="3"/>
-            <!-- Eyes -->
-            <circle cx="42" cy="25" r="2" fill="#fff"/>
-            <circle cx="58" cy="25" r="2" fill="#fff"/>
+            <!-- Eyes (will move to follow cursor) -->
+            <circle id="eyeLeft" cx="42" cy="25" r="2" fill="#fff"/>
+            <circle id="eyeRight" cx="58" cy="25" r="2" fill="#fff"/>
             <!-- Smile -->
-            <path d="M 40 35 Q 50 42 60 35" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M 35 35 Q 50 48 65 35" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
           </svg>
         </div>
         <ul class="nav-links">
@@ -157,24 +160,52 @@
     <div class="message">you stink!</div>
 
     <script>
-      // Stick figure head follows cursor
+      // Eyes follow cursor (head stays fixed)
       const stickHead = document.getElementById('stickHead');
+      const eyeLeft = document.getElementById('eyeLeft');
+      const eyeRight = document.getElementById('eyeRight');
       const nav = document.querySelector('nav');
+      
+      // Head center in SVG coordinates (50, 30)
+      const headCenterX = 50;
+      const headCenterY = 30;
+      const eyeRadius = 6; // Max distance eyes can move from center
       
       document.addEventListener('mousemove', (e) => {
         const navRect = nav.getBoundingClientRect();
-        const navCenterX = navRect.left + navRect.width / 2;
-        const navCenterY = navRect.top + navRect.height / 2;
+        const stickHeadRect = stickHead.getBoundingClientRect();
         
+        // Get head center in screen coordinates
+        const headScreenX = stickHeadRect.left + stickHeadRect.width / 2;
+        const headScreenY = stickHeadRect.top + stickHeadRect.height / 2;
+        
+        // Calculate mouse position relative to head center
         const mouseX = e.clientX;
         const mouseY = e.clientY;
         
-        const deltaX = mouseX - navCenterX;
-        const deltaY = mouseY - navCenterY;
+        const deltaX = mouseX - headScreenX;
+        const deltaY = mouseY - headScreenY;
         
-        const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+        // Calculate angle and distance
+        const angle = Math.atan2(deltaY, deltaX);
+        const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 10, eyeRadius);
         
-        stickHead.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+        // Calculate eye positions (eyes move together but stay within head)
+        const eyeOffsetX = Math.cos(angle) * distance;
+        const eyeOffsetY = Math.sin(angle) * distance;
+        
+        // Left eye (starts at 42, 25)
+        const leftEyeX = headCenterX - 8 + eyeOffsetX;
+        const leftEyeY = headCenterY - 5 + eyeOffsetY;
+        
+        // Right eye (starts at 58, 25)
+        const rightEyeX = headCenterX + 8 + eyeOffsetX;
+        const rightEyeY = headCenterY - 5 + eyeOffsetY;
+        
+        eyeLeft.setAttribute('cx', leftEyeX);
+        eyeLeft.setAttribute('cy', leftEyeY);
+        eyeRight.setAttribute('cx', rightEyeX);
+        eyeRight.setAttribute('cy', rightEyeY);
       });
     </script>
   </body>
