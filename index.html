@@ -88,8 +88,14 @@
         transform: translate(-50%, -50%);
         width: 40px;
         height: 40px;
-        pointer-events: none;
+        pointer-events: auto;
         z-index: 101;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .stick-head:hover {
+        transform: translate(-50%, -50%) scale(1.1);
       }
       
       .stick-head circle[id^="eye"] {
@@ -99,6 +105,11 @@
       .stick-head svg {
         width: 100%;
         height: 100%;
+        display: block;
+      }
+
+      .stick-head {
+        text-decoration: none;
       }
 
       /* Hero Section */
@@ -126,6 +137,12 @@
       .hero-content {
         max-width: 520px;
         text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 3rem 2.5rem;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
       }
 
       .hero-title {
@@ -152,6 +169,7 @@
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
+        font-family: 'Courier New', Courier, monospace;
       }
 
       /* Side Images */
@@ -251,6 +269,11 @@
 
         .hero-description {
           font-size: 1rem;
+          font-family: 'Courier New', Courier, monospace;
+        }
+
+      .hero-content {
+          padding: 2rem 1.5rem;
         }
 
         .cta-button {
@@ -266,7 +289,7 @@
     <header>
       <nav>
         <a href="index.html" class="logo">GG</a>
-        <div class="stick-head" id="stickHead">
+        <a href="https://www.youtube.com/watch?v=R2PiVXjanws&list=RDR2PiVXjanws&start_radio=1" target="_blank" class="stick-head" id="stickHead">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <!-- Head circle -->
             <circle cx="50" cy="30" r="20" fill="none" stroke="#fff" stroke-width="3"/>
@@ -276,10 +299,10 @@
             <!-- Smile -->
             <path d="M 35 35 Q 50 48 65 35" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
           </svg>
-        </div>
+        </a>
         <ul class="nav-links">
           <li><a href="#home">Home</a></li>
-          <li><a href="maps.html">Maps</a></li>
+          <li><a href="maps.html">visit us</a></li>
           <li><a href="https://www.youtube.com/watch?v=ZKMU72K2Jqc">Watch</a></li>
           <li><a href="about.html">About</a></li>
         </ul>
@@ -338,20 +361,26 @@
     </section>
 
     <footer style="text-align:center; padding: 2rem 1rem; color:#aaa; font-size:0.9rem;">
-      gg wp thx for tutorial :)
+      gg wp, thx for <a href="https://www.youtube.com/watch?v=H1Xjp98_vIs" target="_blank" style="color:#d4af37; text-decoration:none; transition:color 0.3s ease;">tutorial</a> :)
     </footer>
 
     <script>
-      // Auto-open video in new tab on page load
-      window.addEventListener('load', function() {
-        window.open('https://www.youtube.com/watch?v=ZKMU72K2Jqc', '_blank');
-      });
-
       // Eyes follow cursor (head stays fixed)
       const stickHead = document.getElementById('stickHead');
       const eyeLeft = document.getElementById('eyeLeft');
       const eyeRight = document.getElementById('eyeRight');
       const nav = document.querySelector('nav');
+      
+      // Add hover effect to footer link
+      const footerLink = document.querySelector('footer a');
+      if (footerLink) {
+        footerLink.addEventListener('mouseenter', function() {
+          this.style.color = '#f0e68c';
+        });
+        footerLink.addEventListener('mouseleave', function() {
+          this.style.color = '#d4af37';
+        });
+      }
       
       // Head center in SVG coordinates (50, 30)
       const headCenterX = 50;
@@ -359,6 +388,8 @@
       const eyeRadius = 6; // Max distance eyes can move from center
       
       document.addEventListener('mousemove', (e) => {
+        if (!stickHead || !eyeLeft || !eyeRight) return;
+        
         const navRect = nav.getBoundingClientRect();
         const stickHeadRect = stickHead.getBoundingClientRect();
         

@@ -106,11 +106,22 @@
         background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
       }
 
+      .maps-content-wrapper {
+        width: 100%;
+        max-width: 1400px;
+        aspect-ratio: 1;
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 2rem;
+        background: rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
+
       .maps-content {
         display: flex;
         gap: 3rem;
-        max-width: 1400px;
         width: 100%;
+        height: 100%;
         align-items: flex-start;
       }
 
@@ -218,6 +229,11 @@
 
       /* Responsive */
       @media (max-width: 1024px) {
+        .maps-content-wrapper {
+          aspect-ratio: auto;
+          max-height: none;
+        }
+
         .maps-content {
           flex-direction: column;
           gap: 2rem;
@@ -296,18 +312,28 @@
 
     <!-- Maps Section -->
     <div class="maps-container">
-      <div class="maps-content">
-        <div class="maps-info">
-          <h2>Visit Us</h2>
-          <div class="address-section">
-            <h3>Location</h3>
-            <p class="address-line">Empire State Building</p>
-            <p>350 5th Avenue</p>
-            <p>New York, NY 10118</p>
-            <p>United States</p>
+      <div class="maps-content-wrapper">
+        <div class="maps-content">
+          <div class="maps-info">
+            <h2>Visit Us</h2>
+            <div class="address-section">
+              <h3>Location</h3>
+              <p class="address-line">Empire State Building</p>
+              <p>350 5th Avenue</p>
+              <p>New York, NY 10118</p>
+              <p>United States</p>
+            </div>
+            <div class="hours-section">
+              <p>We are always open for anyone who wishes to visit.</p>
+            </div>
           </div>
-          <div class="hours-section">
-            <p>We are always open for anyone who wishes to visit.</p>
+          <div class="maps-wrapper">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.184133982!2d-73.98811768459418!3d40.74844097932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
           </div>
           <div class="stick-figure-container">
             <div class="stick-figure" id="stickFigure">
@@ -356,14 +382,6 @@
               </svg>
             </div>
           </div>
-        </div>
-        <div class="maps-wrapper">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.184133982!2d-73.98811768459418!3d40.74844097932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
         </div>
       </div>
     </div>
