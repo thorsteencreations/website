@@ -184,12 +184,12 @@
         font-style: italic;
       }
 
-      /* Stick Figure with Binoculars */
+      /* Stick Figure with Spyglass */
       .stick-figure-container {
         margin-top: 2rem;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-start;
+        align-items: flex-end;
         padding-top: 2rem;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
       }
@@ -205,7 +205,7 @@
         height: 100%;
       }
 
-      .binoculars {
+      .spyglass {
         transition: transform 0.1s ease-out;
         transform-origin: 50px 20px;
       }
@@ -365,20 +365,22 @@
                 <line x1="40" y1="180" x2="30" y2="190" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
                 <line x1="60" y1="180" x2="70" y2="190" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
                 
-                <!-- Pirate Binoculars (will rotate to follow cursor) -->
-                <g class="binoculars" id="binoculars">
-                  <!-- Binoculars frame -->
-                  <ellipse cx="35" cy="20" rx="8" ry="6" fill="none" stroke="#d4af37" stroke-width="2"/>
-                  <ellipse cx="65" cy="20" rx="8" ry="6" fill="none" stroke="#d4af37" stroke-width="2"/>
-                  <!-- Bridge between lenses -->
-                  <rect x="43" y="18" width="4" height="4" fill="#d4af37"/>
-                  <!-- Lens details -->
-                  <circle cx="35" cy="20" r="5" fill="none" stroke="#fff" stroke-width="1"/>
-                  <circle cx="65" cy="20" r="5" fill="none" stroke="#fff" stroke-width="1"/>
-                  <!-- Strap -->
-                  <path d="M 25 20 Q 20 15 15 20" stroke="#d4af37" stroke-width="1.5" fill="none"/>
-                  <path d="M 75 20 Q 80 15 85 20" stroke="#d4af37" stroke-width="1.5" fill="none"/>
-                </g>
+                 <!-- Pirate Spyglass/Telescope (will rotate to follow cursor) -->
+                 <g class="spyglass" id="spyglass">
+                   <!-- Spyglass body (extended tube) -->
+                   <ellipse cx="50" cy="20" rx="6" ry="4" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+                   <ellipse cx="50" cy="15" rx="5" ry="3" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+                   <ellipse cx="50" cy="10" rx="4" ry="2.5" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+                   <!-- Lens at front -->
+                   <circle cx="50" cy="10" r="3.5" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+                   <circle cx="50" cy="10" r="2.5" fill="rgba(255, 255, 255, 0.3)"/>
+                   <!-- Eye piece at back -->
+                   <circle cx="50" cy="20" r="4" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+                   <circle cx="50" cy="20" r="2.5" fill="rgba(0, 0, 0, 0.5)"/>
+                   <!-- Decorative rings -->
+                   <line x1="46" y1="12" x2="54" y2="12" stroke="#654321" stroke-width="0.5"/>
+                   <line x1="46" y1="17" x2="54" y2="17" stroke="#654321" stroke-width="0.5"/>
+                 </g>
               </svg>
             </div>
           </div>
@@ -437,32 +439,32 @@
         });
       }
 
-      // Binoculars follow cursor - Maps page stick figure
-      const stickFigure = document.getElementById('stickFigure');
-      const binoculars = document.getElementById('binoculars');
-      
-      if (stickFigure && binoculars) {
-        document.addEventListener('mousemove', (e) => {
-          const stickFigureRect = stickFigure.getBoundingClientRect();
-          
-          // Binoculars center in SVG coordinates (50, 20)
-          const binocularsCenterX = stickFigureRect.left + (stickFigureRect.width * 0.5);
-          const binocularsCenterY = stickFigureRect.top + (stickFigureRect.height * 0.1);
-          
-          // Calculate mouse position relative to binoculars center
-          const mouseX = e.clientX;
-          const mouseY = e.clientY;
-          
-          const deltaX = mouseX - binocularsCenterX;
-          const deltaY = mouseY - binocularsCenterY;
-          
-          // Calculate angle for binoculars rotation
-          const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-          
-          // Rotate binoculars to follow cursor
-          binoculars.style.transform = `rotate(${angle}deg)`;
-        });
-      }
+       // Spyglass follows cursor - Maps page stick figure
+       const stickFigure = document.getElementById('stickFigure');
+       const spyglass = document.getElementById('spyglass');
+       
+       if (stickFigure && spyglass) {
+         document.addEventListener('mousemove', (e) => {
+           const stickFigureRect = stickFigure.getBoundingClientRect();
+           
+           // Spyglass pivot point (eye position) in SVG coordinates (50, 20)
+           const spyglassPivotX = stickFigureRect.left + (stickFigureRect.width * 0.5);
+           const spyglassPivotY = stickFigureRect.top + (stickFigureRect.height * 0.1);
+           
+           // Calculate mouse position relative to spyglass pivot
+           const mouseX = e.clientX;
+           const mouseY = e.clientY;
+           
+           const deltaX = mouseX - spyglassPivotX;
+           const deltaY = mouseY - spyglassPivotY;
+           
+           // Calculate angle for spyglass rotation (pointing toward cursor)
+           const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+           
+           // Rotate spyglass to follow cursor (pointing toward mouse)
+           spyglass.style.transform = `rotate(${angle}deg)`;
+         });
+       }
     </script>
   </body>
 </html>
