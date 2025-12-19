@@ -46,6 +46,7 @@
         max-width: 1400px;
         margin: 0 auto;
         width: 100%;
+        position: relative;
       }
 
       .logo {
@@ -77,6 +78,24 @@
 
       .nav-links a:hover {
         color: #d4af37;
+      }
+
+      /* Stick Figure Head */
+      .stick-head {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        transition: transform 0.1s ease-out;
+        pointer-events: none;
+        z-index: 101;
+      }
+
+      .stick-head svg {
+        width: 100%;
+        height: 100%;
       }
 
       /* Hero Section */
@@ -173,6 +192,11 @@
         box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
       }
 
+      .cta-button:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+      }
+
       /* Accent Line */
       .accent-line {
         width: 80px;
@@ -239,6 +263,17 @@
     <header>
       <nav>
         <a href="index.html" class="logo">GG</a>
+        <div class="stick-head" id="stickHead">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Head circle -->
+            <circle cx="50" cy="30" r="20" fill="none" stroke="#fff" stroke-width="3"/>
+            <!-- Eyes -->
+            <circle cx="42" cy="25" r="2" fill="#fff"/>
+            <circle cx="58" cy="25" r="2" fill="#fff"/>
+            <!-- Smile -->
+            <path d="M 40 35 Q 50 42 60 35" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
         <ul class="nav-links">
           <li><a href="#home">Home</a></li>
           <li><a href="maps.html">Maps</a></li>
@@ -308,6 +343,75 @@
       window.addEventListener('load', function() {
         window.open('https://www.youtube.com/watch?v=ZKMU72K2Jqc', '_blank');
       });
+
+      // Stick figure head follows cursor
+      const stickHead = document.getElementById('stickHead');
+      const nav = document.querySelector('nav');
+      
+      document.addEventListener('mousemove', (e) => {
+        const navRect = nav.getBoundingClientRect();
+        const navCenterX = navRect.left + navRect.width / 2;
+        const navCenterY = navRect.top + navRect.height / 2;
+        
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        const deltaX = mouseX - navCenterX;
+        const deltaY = mouseY - navCenterY;
+        
+        const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+        
+        stickHead.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+      });
+
+      // Button interactions
+      const ctaButton = document.querySelector('.cta-button');
+      
+      if (ctaButton) {
+        ctaButton.addEventListener('click', function(e) {
+          // Create ripple effect
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = x + 'px';
+          ripple.style.top = y + 'px';
+          ripple.classList.add('ripple');
+          
+          this.appendChild(ripple);
+          
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+        });
+      }
+
+      // Add ripple effect styles
+      const style = document.createElement('style');
+      style.textContent = `
+        .cta-button {
+          position: relative;
+          overflow: hidden;
+        }
+        .ripple {
+          position: absolute;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.6);
+          transform: scale(0);
+          animation: ripple-animation 0.6s ease-out;
+          pointer-events: none;
+        }
+        @keyframes ripple-animation {
+          to {
+            transform: scale(4);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
     </script>
   </body>
 </html>
