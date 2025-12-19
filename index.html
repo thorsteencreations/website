@@ -401,46 +401,70 @@
       // Head center in SVG coordinates (50, 30)
       const headCenterX = 50;
       const headCenterY = 30;
-      const eyeRadius = 6; // Max distance eyes can move from center
-      
+      const eyeRadius = 6; // Max distance eyes can move from center (in SVG units)
+
+      // Use rAF + cached head rect to avoid layout thrashing and stutter
+      let targetMouseX = 0;
+      let targetMouseY = 0;
+      let headScreenX = 0;
+      let headScreenY = 0;
+      let stickHeadRect = null;
+
+      function updateHeadRect() {
+        if (!stickHead) return;
+        stickHeadRect = stickHead.getBoundingClientRect();
+        headScreenX = stickHeadRect.left + stickHeadRect.width / 2;
+        headScreenY = stickHeadRect.top + stickHeadRect.height / 2;
+      }
+
+      // Update cached rect on load, resize and scroll
+      updateHeadRect();
+      window.addEventListener('resize', updateHeadRect);
+      window.addEventListener('scroll', updateHeadRect, { passive: true });
+
+      // Mouse/pointer moves only update the target positions (cheap)
       document.addEventListener('mousemove', (e) => {
-        if (!stickHead || !eyeLeft || !eyeRight) return;
-        
-        const navRect = nav.getBoundingClientRect();
-        const stickHeadRect = stickHead.getBoundingClientRect();
-        
-        // Get head center in screen coordinates
-        const headScreenX = stickHeadRect.left + stickHeadRect.width / 2;
-        const headScreenY = stickHeadRect.top + stickHeadRect.height / 2;
-        
-        // Calculate mouse position relative to head center
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        
-        const deltaX = mouseX - headScreenX;
-        const deltaY = mouseY - headScreenY;
-        
-        // Calculate angle and distance
-        const angle = Math.atan2(deltaY, deltaX);
-        const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 10, eyeRadius);
-        
-        // Calculate eye positions (eyes move together but stay within head)
-        const eyeOffsetX = Math.cos(angle) * distance;
-        const eyeOffsetY = Math.sin(angle) * distance;
-        
-        // Left eye (starts at 42, 25)
+        targetMouseX = e.clientX;
+        targetMouseY = e.clientY;
+      });
+
+      // Convert pixels -> SVG movement scale (tweakable). Using a multiplier
+      // gives responsive movement without repeated getBoundingClientRect calls.
+      const pixelToSvg = 1 / 8; // smaller divisor = more responsive movement
+
+      function animateEyes() {
+        if (!stickHead || !eyeLeft || !eyeRight) {
+          requestAnimationFrame(animateEyes);
+          return;
+        }
+
+        // Ensure head center is up-to-date at least once per frame (cached rect)
+        if (!stickHeadRect) updateHeadRect();
+
+        const dx = targetMouseX - headScreenX;
+        const dy = targetMouseY - headScreenY;
+
+        const angle = Math.atan2(dy, dx);
+        const distancePx = Math.hypot(dx, dy);
+        const distanceSvg = Math.min(distancePx * pixelToSvg, eyeRadius);
+
+        const eyeOffsetX = Math.cos(angle) * distanceSvg;
+        const eyeOffsetY = Math.sin(angle) * distanceSvg;
+
         const leftEyeX = headCenterX - 8 + eyeOffsetX;
         const leftEyeY = headCenterY - 5 + eyeOffsetY;
-        
-        // Right eye (starts at 58, 25)
         const rightEyeX = headCenterX + 8 + eyeOffsetX;
         const rightEyeY = headCenterY - 5 + eyeOffsetY;
-        
+
         eyeLeft.setAttribute('cx', leftEyeX);
         eyeLeft.setAttribute('cy', leftEyeY);
         eyeRight.setAttribute('cx', rightEyeX);
         eyeRight.setAttribute('cy', rightEyeY);
-      });
+
+        requestAnimationFrame(animateEyes);
+      }
+
+      requestAnimationFrame(animateEyes);
 
       // Button interactions
       const ctaButton = document.querySelector('.cta-button');
