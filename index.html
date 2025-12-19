@@ -117,6 +117,13 @@
         fill: #d4af37 !important;
       }
 
+      /* Keep eyes and smile visible on hover by forcing them to black */
+      .stick-head:hover svg #eyeLeft,
+      .stick-head:hover svg #eyeRight,
+      .stick-head:hover svg #smile {
+        stroke: #000 !important;
+        fill: #000 !important;
+      }
       .stick-head {
         text-decoration: none;
       }
@@ -306,7 +313,7 @@
             <circle id="eyeLeft" cx="42" cy="25" r="2" fill="#fff"/>
             <circle id="eyeRight" cx="58" cy="25" r="2" fill="#fff"/>
             <!-- Smile -->
-            <path d="M 35 35 Q 50 48 65 35" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path id="smile" d="M 35 35 Q 50 48 65 35" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
           </svg>
         </a>
         <ul class="nav-links">
