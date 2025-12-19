@@ -19,6 +19,11 @@
         background: #000;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+      }
+
+      body {
+        overflow-x: hidden;
       }
 
       /* Header Navigation */
@@ -44,7 +49,7 @@
       }
 
       .logo {
-        font-size: 1.8rem;
+        font-size: 2.8rem;
         font-weight: 700;
         letter-spacing: 3px;
         text-transform: uppercase;
@@ -80,10 +85,16 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 40px;
-        height: 40px;
-        pointer-events: none;
+        width: 70px;
+        height: 70px;
+        pointer-events: auto;
         z-index: 101;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .stick-head:hover {
+        transform: translate(-50%, -50%) scale(1.1);
       }
       
       .stick-head circle[id^="eye"] {
@@ -93,6 +104,27 @@
       .stick-head svg {
         width: 100%;
         height: 100%;
+        display: block;
+      }
+
+      .stick-head svg * {
+        transition: stroke 0.15s ease, fill 0.15s ease;
+      }
+
+      .stick-head:hover svg * {
+        stroke: #d4af37 !important;
+        fill: #d4af37 !important;
+      }
+
+      /* Keep eyes and smile visible on hover by forcing them to black */
+      .stick-head:hover svg #eyeLeft,
+      .stick-head:hover svg #eyeRight,
+      .stick-head:hover svg #smile {
+        stroke: #000 !important;
+        fill: #000 !important;
+      }
+      .stick-head {
+        text-decoration: none;
       }
 
       body {
@@ -118,7 +150,7 @@
         }
 
         .logo {
-          font-size: 1.4rem;
+          font-size: 2rem;
         }
 
         .nav-links {
@@ -137,7 +169,7 @@
     <header>
       <nav>
         <a href="index.html" class="logo">GG</a>
-        <div class="stick-head" id="stickHead">
+        <a href="https://www.youtube.com/watch?v=R2PiVXjanws&list=RDR2PiVXjanws&start_radio=1" target="_blank" class="stick-head" id="stickHead">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <!-- Head circle -->
             <circle cx="50" cy="30" r="20" fill="none" stroke="#fff" stroke-width="3"/>
@@ -145,13 +177,13 @@
             <circle id="eyeLeft" cx="42" cy="25" r="2" fill="#fff"/>
             <circle id="eyeRight" cx="58" cy="25" r="2" fill="#fff"/>
             <!-- Smile -->
-            <path d="M 35 35 Q 50 48 65 35" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path id="smile" d="M 35 35 Q 50 48 65 35" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
           </svg>
-        </div>
+        </a>
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
           <li><a href="maps.html">Visit us</a></li>
-          <li><a href="https://www.youtube.com/watch?v=ZKMU72K2Jqc">Watch</a></li>
+          <li><a href="https://www.youtube.com/watch?v=ZKMU72K2Jqc" target="_blank" rel="noopener noreferrer">Watch</a></li>
           <li><a href="about.html">About</a></li>
         </ul>
       </nav>
@@ -166,47 +198,84 @@
       const eyeRight = document.getElementById('eyeRight');
       const nav = document.querySelector('nav');
       
+      // Add hover effect to footer link (if present)
+      const footerLink = document.querySelector('footer a');
+      if (footerLink) {
+        footerLink.addEventListener('mouseenter', function() {
+          this.style.color = '#f0e68c';
+        });
+        footerLink.addEventListener('mouseleave', function() {
+          this.style.color = '#d4af37';
+        });
+      }
+      
       // Head center in SVG coordinates (50, 30)
       const headCenterX = 50;
       const headCenterY = 30;
-      const eyeRadius = 6; // Max distance eyes can move from center
-      
+      const eyeRadius = 6; // Max distance eyes can move from center (in SVG units)
+
+      // Use rAF + cached head rect to avoid layout thrashing and stutter
+      let targetMouseX = 0;
+      let targetMouseY = 0;
+      let headScreenX = 0;
+      let headScreenY = 0;
+      let stickHeadRect = null;
+
+      function updateHeadRect() {
+        if (!stickHead) return;
+        stickHeadRect = stickHead.getBoundingClientRect();
+        headScreenX = stickHeadRect.left + stickHeadRect.width / 2;
+        headScreenY = stickHeadRect.top + stickHeadRect.height / 2;
+      }
+
+      // Update cached rect on load, resize and scroll
+      updateHeadRect();
+      window.addEventListener('resize', updateHeadRect);
+      window.addEventListener('scroll', updateHeadRect, { passive: true });
+
+      // Mouse/pointer moves only update the target positions (cheap)
       document.addEventListener('mousemove', (e) => {
-        const navRect = nav.getBoundingClientRect();
-        const stickHeadRect = stickHead.getBoundingClientRect();
-        
-        // Get head center in screen coordinates
-        const headScreenX = stickHeadRect.left + stickHeadRect.width / 2;
-        const headScreenY = stickHeadRect.top + stickHeadRect.height / 2;
-        
-        // Calculate mouse position relative to head center
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        
-        const deltaX = mouseX - headScreenX;
-        const deltaY = mouseY - headScreenY;
-        
-        // Calculate angle and distance
-        const angle = Math.atan2(deltaY, deltaX);
-        const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 10, eyeRadius);
-        
-        // Calculate eye positions (eyes move together but stay within head)
-        const eyeOffsetX = Math.cos(angle) * distance;
-        const eyeOffsetY = Math.sin(angle) * distance;
-        
-        // Left eye (starts at 42, 25)
+        targetMouseX = e.clientX;
+        targetMouseY = e.clientY;
+      });
+
+      // Convert pixels -> SVG movement scale (tweakable). Using a multiplier
+      // gives responsive movement without repeated getBoundingClientRect calls.
+      const pixelToSvg = 1 / 8; // smaller divisor = more responsive movement
+
+      function animateEyes() {
+        if (!stickHead || !eyeLeft || !eyeRight) {
+          requestAnimationFrame(animateEyes);
+          return;
+        }
+
+        // Ensure head center is up-to-date at least once per frame (cached rect)
+        if (!stickHeadRect) updateHeadRect();
+
+        const dx = targetMouseX - headScreenX;
+        const dy = targetMouseY - headScreenY;
+
+        const angle = Math.atan2(dy, dx);
+        const distancePx = Math.hypot(dx, dy);
+        const distanceSvg = Math.min(distancePx * pixelToSvg, eyeRadius);
+
+        const eyeOffsetX = Math.cos(angle) * distanceSvg;
+        const eyeOffsetY = Math.sin(angle) * distanceSvg;
+
         const leftEyeX = headCenterX - 8 + eyeOffsetX;
         const leftEyeY = headCenterY - 5 + eyeOffsetY;
-        
-        // Right eye (starts at 58, 25)
         const rightEyeX = headCenterX + 8 + eyeOffsetX;
         const rightEyeY = headCenterY - 5 + eyeOffsetY;
-        
+
         eyeLeft.setAttribute('cx', leftEyeX);
         eyeLeft.setAttribute('cy', leftEyeY);
         eyeRight.setAttribute('cx', rightEyeX);
         eyeRight.setAttribute('cy', rightEyeY);
-      });
+
+        requestAnimationFrame(animateEyes);
+      }
+
+      requestAnimationFrame(animateEyes);
     </script>
   </body>
 </html>
